@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_07xs2a8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
+  <bpmn:process id="Process_1iaykvo" isExecutable="true">
+    <bpmn:userTask id="Activity_15vmjs6" name="approveCustmoer">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_095jynv</bpmn:incoming>
+      <bpmn:outgoing>Flow_02l2odj</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_1jeztkd">
+      <bpmn:incoming>Flow_1iwsvtq</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_02l2odj" sourceRef="Activity_15vmjs6" targetRef="Activity_03amkdd" />
+    <bpmn:sequenceFlow id="Flow_095jynv" sourceRef="Activity_1bp7pot" targetRef="Activity_15vmjs6" />
+    <bpmn:sequenceFlow id="Flow_1iwsvtq" sourceRef="Activity_03amkdd" targetRef="Event_1jeztkd" />
+    <bpmn:sequenceFlow id="Flow_1vy23za" sourceRef="StartEvent_1" targetRef="Activity_1bp7pot" />
+    <bpmn:serviceTask id="Activity_03amkdd" name="notifyCustomer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="notify-customer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02l2odj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1iwsvtq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1vy23za</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_1bp7pot" name="validateCustomer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="validate-customer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1vy23za</bpmn:incoming>
+      <bpmn:outgoing>Flow_095jynv</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1iaykvo">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1bp7pot_di" bpmnElement="Activity_1bp7pot">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_15vmjs6_di" bpmnElement="Activity_15vmjs6">
+        <dc:Bounds x="400" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03amkdd_di" bpmnElement="Activity_03amkdd">
+        <dc:Bounds x="570" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1jeztkd_di" bpmnElement="Event_1jeztkd">
+        <dc:Bounds x="742" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1vy23za_di" bpmnElement="Flow_1vy23za">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="240" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_095jynv_di" bpmnElement="Flow_095jynv">
+        <di:waypoint x="340" y="120" />
+        <di:waypoint x="400" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02l2odj_di" bpmnElement="Flow_02l2odj">
+        <di:waypoint x="500" y="120" />
+        <di:waypoint x="570" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1iwsvtq_di" bpmnElement="Flow_1iwsvtq">
+        <di:waypoint x="670" y="120" />
+        <di:waypoint x="742" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
