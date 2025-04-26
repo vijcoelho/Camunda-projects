@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Atualizar Status</title>
+</head>
+<body>
+
+<h2>Atualizar Status de Análise</h2>
+
+<form action="/atualizar-status" method="post">
+    <label for="processoId">ID do Processo:</label>
+    <input type="text" id="processoId" name="processoId" required><br><br>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+        <option value="APROVADO">Aprovado</option>
+        <option value="REPROVADO">Reprovado</option>
+    </select><br><br>
+
+    <button type="submit">Atualizar Status</button>
+</form>
+</body>
+</html>

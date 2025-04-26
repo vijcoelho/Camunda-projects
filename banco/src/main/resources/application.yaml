@@ -1,0 +1,5 @@
+spring.datasource.url: mongodb://localhost:27017/camunda-database
+
+camunda.bpm.admin-user:
+  id: admin
+  password: admin

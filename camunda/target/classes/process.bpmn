@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0">
+  <bpmn:process id="controller-process" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1pymg41</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_0xrdc65" name="cadastrar" camunda:delegateExpression="${cadastroDelegate}">
+      <bpmn:incoming>Flow_1pymg41</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tn9125</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1pymg41" sourceRef="StartEvent_1" targetRef="Activity_0xrdc65" />
+    <bpmn:userTask id="task_analisar" name="analisar">
+      <bpmn:extensionElements>
+        <camunda:taskListener class="teste.com.controlador.taskListener.AnalisarTaskListener" event="complete" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1tn9125</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q2e4k5</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0kmza0r</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1tn9125" sourceRef="Activity_0xrdc65" targetRef="task_analisar" />
+    <bpmn:serviceTask id="Activity_1nuzrkk" name="aprovado" camunda:delegateExpression="${aprovadoDelegate}">
+      <bpmn:incoming>Flow_0q2e4k5</bpmn:incoming>
+      <bpmn:outgoing>Flow_11ksx2u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0q2e4k5" sourceRef="task_analisar" targetRef="Activity_1nuzrkk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${resultado == "Aprovado"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_19w0jcb">
+      <bpmn:incoming>Flow_11ksx2u</bpmn:incoming>
+      <bpmn:incoming>Flow_1wuaylp</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_11ksx2u" sourceRef="Activity_1nuzrkk" targetRef="Event_19w0jcb" />
+    <bpmn:serviceTask id="Activity_0nel8r7" name="reprovado" camunda:delegateExpression="${reprovadoDelegate}">
+      <bpmn:incoming>Flow_0kmza0r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wuaylp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0kmza0r" sourceRef="task_analisar" targetRef="Activity_0nel8r7">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${resultado == "Reprovado"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1wuaylp" sourceRef="Activity_0nel8r7" targetRef="Event_19w0jcb" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="controller-process">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="239" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0xrdc65_di" bpmnElement="Activity_0xrdc65">
+        <dc:Bounds x="310" y="217" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1biqpfh_di" bpmnElement="task_analisar">
+        <dc:Bounds x="520" y="217" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nuzrkk_di" bpmnElement="Activity_1nuzrkk">
+        <dc:Bounds x="730" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19w0jcb_di" bpmnElement="Event_19w0jcb">
+        <dc:Bounds x="942" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nel8r7_di" bpmnElement="Activity_0nel8r7">
+        <dc:Bounds x="730" y="290" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1pymg41_di" bpmnElement="Flow_1pymg41">
+        <di:waypoint x="215" y="257" />
+        <di:waypoint x="310" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tn9125_di" bpmnElement="Flow_1tn9125">
+        <di:waypoint x="410" y="257" />
+        <di:waypoint x="520" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0q2e4k5_di" bpmnElement="Flow_0q2e4k5">
+        <di:waypoint x="620" y="257" />
+        <di:waypoint x="675" y="257" />
+        <di:waypoint x="675" y="120" />
+        <di:waypoint x="730" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11ksx2u_di" bpmnElement="Flow_11ksx2u">
+        <di:waypoint x="830" y="120" />
+        <di:waypoint x="942" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kmza0r_di" bpmnElement="Flow_0kmza0r">
+        <di:waypoint x="570" y="297" />
+        <di:waypoint x="570" y="330" />
+        <di:waypoint x="730" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wuaylp_di" bpmnElement="Flow_1wuaylp">
+        <di:waypoint x="830" y="330" />
+        <di:waypoint x="960" y="330" />
+        <di:waypoint x="960" y="138" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

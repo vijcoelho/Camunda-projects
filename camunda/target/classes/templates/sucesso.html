@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro Concluído</title>
+  <style>
+    :root {
+      --success-color: #4cc9f0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
+    }
+
+    h1 {
+      color: var(--success-color);
+      margin-bottom: 20px;
+    }
+
+    .success-icon {
+      font-size: 60px;
+      color: var(--success-color);
+      margin-bottom: 20px;
+    }
+
+    .message {
+      font-size: 18px;
+      margin-bottom: 30px;
+      color: #495057;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--success-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="success-icon">✓</div>
+  <h1>Cadastro Concluído!</h1>
+  <div class="message" th:text="${mensagem} ?: 'Usuário cadastrado com sucesso.'"></div>
+  <a href="/form" class="back-link">Voltar ao formulário</a>
+</div>
+</body>
+</html>
