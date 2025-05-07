@@ -1,96 +1,135 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0">
-  <bpmn:process id="controller-process" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://bpmn.io/schema/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:yaoqiang="http://bpmn.sourceforge.net" exporter="Camunda Modeler" exporterVersion="5.31.0" expressionLanguage="http://www.w3.org/1999/XPath" id="Definitions_0fr9mxs" name="" targetNamespace="http://bpmn.io/schema/bpmn" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <bpmn:process camunda:historyTimeToLive="180" id="controller-process" isClosed="false" isExecutable="true" processType="None">
+    <bpmn:extensionElements>
+      <yaoqiang:description/>
+      <yaoqiang:pageFormat height="841.8897637795276" imageableHeight="831.8897637795276" imageableWidth="588.1102362204724" imageableX="5.0" imageableY="5.0" orientation="0" width="598.1102362204724"/>
+      <yaoqiang:page background="#FFFFFF" horizontalCount="1" verticalCount="1"/>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="StartEvent_1" isInterrupting="true" parallelMultiple="false">
       <bpmn:outgoing>Flow_1pymg41</bpmn:outgoing>
+      <bpmn:outputSet/>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_0xrdc65" name="cadastrar" camunda:delegateExpression="${cadastroDelegate}">
+    <bpmn:serviceTask camunda:delegateExpression="${cadastroDelegate}" completionQuantity="1" id="Activity_0xrdc65" implementation="##WebService" isForCompensation="false" name="cadastrar" startQuantity="1">
       <bpmn:incoming>Flow_1pymg41</bpmn:incoming>
       <bpmn:outgoing>Flow_1tn9125</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1pymg41" sourceRef="StartEvent_1" targetRef="Activity_0xrdc65" />
-    <bpmn:userTask id="task_analisar" name="analisar">
+    <bpmn:sequenceFlow id="Flow_1pymg41" sourceRef="StartEvent_1" targetRef="Activity_0xrdc65"/>
+    <bpmn:userTask completionQuantity="1" id="task_analisar" implementation="##unspecified" isForCompensation="false" name="analisar" startQuantity="1">
       <bpmn:extensionElements>
-        <camunda:taskListener class="teste.com.controlador.taskListener.AnalisarTaskListener" event="complete" />
+        <camunda:taskListener class="teste.com.controlador.taskListener.AnalisarTaskListener" event="complete"/>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tn9125</bpmn:incoming>
       <bpmn:outgoing>Flow_0q2e4k5</bpmn:outgoing>
       <bpmn:outgoing>Flow_0kmza0r</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1tn9125" sourceRef="Activity_0xrdc65" targetRef="task_analisar" />
-    <bpmn:serviceTask id="Activity_1nuzrkk" name="aprovado" camunda:delegateExpression="${aprovadoDelegate}">
+    <bpmn:sequenceFlow id="Flow_1tn9125" sourceRef="Activity_0xrdc65" targetRef="task_analisar"/>
+    <bpmn:serviceTask camunda:delegateExpression="${aprovadoDelegate}" completionQuantity="1" id="Activity_1nuzrkk" implementation="##WebService" isForCompensation="false" name="aprovado" startQuantity="1">
       <bpmn:incoming>Flow_0q2e4k5</bpmn:incoming>
       <bpmn:outgoing>Flow_11ksx2u</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0q2e4k5" sourceRef="task_analisar" targetRef="Activity_1nuzrkk">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${resultado == "Aprovado"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${resultado == "Aprovado"}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_19w0jcb">
       <bpmn:incoming>Flow_11ksx2u</bpmn:incoming>
       <bpmn:incoming>Flow_1wuaylp</bpmn:incoming>
+      <bpmn:inputSet/>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_11ksx2u" sourceRef="Activity_1nuzrkk" targetRef="Event_19w0jcb" />
-    <bpmn:serviceTask id="Activity_0nel8r7" name="reprovado" camunda:delegateExpression="${reprovadoDelegate}">
+    <bpmn:sequenceFlow id="Flow_11ksx2u" sourceRef="Activity_1nuzrkk" targetRef="Event_19w0jcb"/>
+    <bpmn:serviceTask camunda:delegateExpression="${reprovadoDelegate}" completionQuantity="1" id="Activity_0nel8r7" implementation="##WebService" isForCompensation="false" name="reprovado" startQuantity="1">
       <bpmn:incoming>Flow_0kmza0r</bpmn:incoming>
       <bpmn:outgoing>Flow_1wuaylp</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0kmza0r" sourceRef="task_analisar" targetRef="Activity_0nel8r7">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${resultado == "Reprovado"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${resultado == "Reprovado"}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1wuaylp" sourceRef="Activity_0nel8r7" targetRef="Event_19w0jcb" />
+    <bpmn:sequenceFlow id="Flow_1wuaylp" sourceRef="Activity_0nel8r7" targetRef="Event_19w0jcb"/>
   </bpmn:process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="controller-process">
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="239" width="36" height="36" />
+  <bpmndi:BPMNDiagram id="Yaoqiang_Diagram-controller-process" name="Untitled Diagram" resolution="96.0">
+    <bpmndi:BPMNPlane bpmnElement="controller-process">
+      <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="Yaoqiang-StartEvent_1">
+        <dc:Bounds height="32.0" width="32.0" x="179.0" y="239.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="6.0" x="192.0" y="279.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0xrdc65_di" bpmnElement="Activity_0xrdc65">
-        <dc:Bounds x="310" y="217" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape bpmnElement="Activity_0xrdc65" id="Yaoqiang-Activity_0xrdc65">
+        <dc:Bounds height="80.0" width="100.0" x="310.0" y="217.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="52.0" x="334.0" y="249.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1biqpfh_di" bpmnElement="task_analisar">
-        <dc:Bounds x="520" y="217" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape bpmnElement="task_analisar" id="Yaoqiang-task_analisar">
+        <dc:Bounds height="80.0" width="100.0" x="520.0" y="217.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="43.0" x="548.5" y="249.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nuzrkk_di" bpmnElement="Activity_1nuzrkk">
-        <dc:Bounds x="730" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape bpmnElement="Activity_1nuzrkk" id="Yaoqiang-Activity_1nuzrkk">
+        <dc:Bounds height="80.0" width="100.0" x="730.0" y="80.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="51.0" x="754.5" y="112.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_19w0jcb_di" bpmnElement="Event_19w0jcb">
-        <dc:Bounds x="942" y="102" width="36" height="36" />
+      <bpmndi:BPMNShape bpmnElement="Event_19w0jcb" id="Yaoqiang-Event_19w0jcb">
+        <dc:Bounds height="32.0" width="32.0" x="942.0" y="102.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="6.0" x="955.0" y="142.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0nel8r7_di" bpmnElement="Activity_0nel8r7">
-        <dc:Bounds x="730" y="290" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape bpmnElement="Activity_0nel8r7" id="Yaoqiang-Activity_0nel8r7">
+        <dc:Bounds height="80.0" width="100.0" x="730.0" y="290.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="55.0" x="752.5" y="322.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1pymg41_di" bpmnElement="Flow_1pymg41">
-        <di:waypoint x="215" y="257" />
-        <di:waypoint x="310" y="257" />
+      <bpmndi:BPMNEdge bpmnElement="Flow_1wuaylp" id="Yaoqiang-Flow_1wuaylp">
+        <di:waypoint x="830.0" y="330.0"/>
+        <di:waypoint x="960.0" y="330.0"/>
+        <di:waypoint x="960.0" y="133.87450786638755"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="6.0" x="957.0" y="287.34"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1tn9125_di" bpmnElement="Flow_1tn9125">
-        <di:waypoint x="410" y="257" />
-        <di:waypoint x="520" y="257" />
+      <bpmndi:BPMNEdge bpmnElement="Flow_0q2e4k5" id="Yaoqiang-Flow_0q2e4k5">
+        <di:waypoint x="620.0" y="257.0"/>
+        <di:waypoint x="675.0" y="257.0"/>
+        <di:waypoint x="675.0" y="120.0"/>
+        <di:waypoint x="730.0" y="120.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="136.0" x="607.0" y="178.9"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0q2e4k5_di" bpmnElement="Flow_0q2e4k5">
-        <di:waypoint x="620" y="257" />
-        <di:waypoint x="675" y="257" />
-        <di:waypoint x="675" y="120" />
-        <di:waypoint x="730" y="120" />
+      <bpmndi:BPMNEdge bpmnElement="Flow_1tn9125" id="Yaoqiang-Flow_1tn9125">
+        <di:waypoint x="410.0" y="257.0"/>
+        <di:waypoint x="520.0" y="257.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="6.0" x="462.0" y="247.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_11ksx2u_di" bpmnElement="Flow_11ksx2u">
-        <di:waypoint x="830" y="120" />
-        <di:waypoint x="942" y="120" />
+      <bpmndi:BPMNEdge bpmnElement="Flow_11ksx2u" id="Yaoqiang-Flow_11ksx2u">
+        <di:waypoint x="830.0" y="120.0"/>
+        <di:waypoint x="942.0" y="118.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="6.0" x="883.0" y="109.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0kmza0r_di" bpmnElement="Flow_0kmza0r">
-        <di:waypoint x="570" y="297" />
-        <di:waypoint x="570" y="330" />
-        <di:waypoint x="730" y="330" />
+      <bpmndi:BPMNEdge bpmnElement="Flow_0kmza0r" id="Yaoqiang-Flow_0kmza0r">
+        <di:waypoint x="570.0" y="297.0"/>
+        <di:waypoint x="570.0" y="330.0"/>
+        <di:waypoint x="730.0" y="330.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="143.0" x="562.0" y="320.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1wuaylp_di" bpmnElement="Flow_1wuaylp">
-        <di:waypoint x="830" y="330" />
-        <di:waypoint x="960" y="330" />
-        <di:waypoint x="960" y="138" />
+      <bpmndi:BPMNEdge bpmnElement="Flow_1pymg41" id="Yaoqiang-Flow_1pymg41">
+        <di:waypoint x="211.0" y="255.0"/>
+        <di:waypoint x="310.0" y="257.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="19.2" width="6.0" x="257.5" y="246.4"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
-</bpmn:definitions>
+</definitions>
