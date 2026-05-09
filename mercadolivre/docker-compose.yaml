@@ -1,0 +1,93 @@
+networks:
+  camunda-network:
+    driver: bridge
+
+services:
+
+  # ──────────────────────────────────────────────
+  # ELASTICSEARCH
+  # O banco de histórico — Operate e Tasklist leem daqui
+  # ──────────────────────────────────────────────
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node          # modo single node (dev)
+      - cluster.name=elasticsearch
+      - xpack.security.enabled=false        # sem SSL no ambiente local
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m     # limita memória RAM
+    ports:
+      - "9200:9200"   # API REST do Elasticsearch
+    networks:
+      - camunda-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ──────────────────────────────────────────────
+  # ZEEBE — a engine (o maestro!)
+  # Porta 26500 = gRPC (sua app Java conecta aqui)
+  # Porta 8080  = REST API
+  # ──────────────────────────────────────────────
+  zeebe:
+    image: camunda/camunda:8.9.0
+    container_name: zeebe
+    environment:
+      - SPRING_PROFILES_ACTIVE=broker,gateway,operate,tasklist
+      # Exporta eventos pro Elasticsearch
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.camunda.zeebe.exporter.ElasticsearchExporter
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_BULK_SIZE=1
+      # Desativa autenticação para desenvolvimento local
+      - CAMUNDA_SECURITY_AUTHENTICATION_METHOD=NONE
+      # Endpoints
+      - ZEEBE_BROKER_GATEWAY_ENABLE=true
+    ports:
+      - "26500:26500"   # gRPC — sua app Java conecta aqui!
+      - "8080:8080"     # REST + Operate + Tasklist
+      - "9600:9600"     # métricas (opcional)
+    networks:
+      - camunda-network
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - zeebe-data:/usr/local/zeebe/data   # persiste dados entre restarts
+
+  # ──────────────────────────────────────────────
+  # SEU POSTGRESQL — banco de negócio da sua app
+  # Completamente separado do Camunda!
+  # ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: mercadolivre
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5432:5432"
+    networks:
+      - camunda-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  # ──────────────────────────────────────────────
+  # RABBITMQ — mensageria para emails e notificações
+  # Interface web: http://localhost:15672
+  # Login: guest / guest
+  # ──────────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"     # porta da aplicação
+      - "15672:15672"   # painel web de administração
+    networks:
+      - camunda-network
+
+volumes:
+  zeebe-data:
+  postgres-data:

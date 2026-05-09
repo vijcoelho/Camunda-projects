@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: mercadolivre
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mercadolivre
+    username: admin
+    password: admin123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  mail:
+    host: smtp.mailtrap.io
+    port: 587
+    username: vijcoelho@gmail.com
+    password: pocj awqd mvaa ascr
+  cloud:
+    stream:
+      function:
+        definition: emailConfirmacao;emailBoasVindas
+      bindings:
+        email-confirmacao-out-0:       # saída via StreamBridge — pode ser qualquer nome
+          destination: email.confirmacao
+        email-boas-vindas-out-0:
+          destination: email.boas-vindas
+        emailConfirmacao-in-0:         # entrada — precisa bater com o nome do @Bean
+          destination: email.confirmacao
+          group: email-service
+        emailBoasVindas-in-0:          # entrada — precisa bater com o nome do @Bean
+          destination: email.boas-vindas
+          group: email-service
+
+      rabbit:
+        bindings:
+          emailConfirmacao-in-0:       # mesmo aqui
+            consumer:
+              auto-bind-dlq: true
+              dlq-ttl: 10000
+          emailBoasVindas-in-0:
+            consumer:
+              auto-bind-dlq: true
+# ──────────────────────────────────────────────
+# CAMUNDA 8 — conexão com o Zeebe
+# ──────────────────────────────────────────────
+camunda:
+  client:
+    mode: self-managed       # estamos rodando local, não no SaaS
+    auth:
+      method: none           # sem autenticação no ambiente dev
+    enabled: true
+    grpc-address: http://localhost:26500
+    rest-address: http://localhost:8080
+    worker:
+      defaults:
+        max-jobs-active: 32
+
+# ──────────────────────────────────────────────
+# PORTA DA SUA APLICAÇÃO
+# Zeebe já usa 8080, então sua app usa 8081
+# ──────────────────────────────────────────────
+server:
+  port: 8081
+
+logging:
+  level:
+    io.camunda: INFO         # logs do Camunda
+    com.project: DEBUG       # logs do seu projeto
