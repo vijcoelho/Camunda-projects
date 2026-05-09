@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.mailtrap.io
     port: 587
-    username: vijcoelho@gmail.com
-    password: pocj awqd mvaa ascr
+    username: xxxxx
+    password: xxxxx
   cloud:
     stream:
       function:
